@@ -31,7 +31,8 @@ app.get("/json", (req, res) => {
     const jsonObj = { "message": "Hello json" };
     res.json(jsonObj);
 })
-```  
+```   
+
 *Use process.env to hid variable*  
 1) require('dotenv').config();  
 2) creat .env file in the root  
@@ -52,4 +53,49 @@ exemple:
 })
 ```  
 
-  
+*MiddleWare*  
+This is the function with ```(req, res, next)=>{next();}```;  
+*Chaine middleware*
+This is to separate the differents step's function  
+exemple:  
+```
+app.get("/now", (req, res, next) => {
+    let timeNow = new Date();
+    timeNow = timeNow.toString();
+    req.time = timeNow;
+    next();
+}, (req, res) => {
+    const jsonTime = { "time": req.time };
+    res.json(jsonTime);
+})  
+```  
+
+*Route paramater: Get route input from client*  
+This is the info that we had between slash inside the path 
+We need to use the 2 dots ":NAME" => req.params.NAME  
+```route_path: '/user/:userId/book/:bookId'``` 
+exemple:  
+```actual_request_URL: '/user/546/book/6754'```  
+
+exemple 2:  
+```
+app.get("/:word/echo", (req, res) => {
+    const ans = req.params.word;
+    res.json({ "word": ans });
+})
+``` 
+*Route parameter: Get Query Paramater from the client*  
+Query paramter are used to get info from the client  
+Query string is delimited by a question mark  
+It include field=value paire  
+Each couple is delimited by a ampersand(&)  
+The methode used to get the info is the req.query  
+Exemple:  
+```  
+app.get("/name", (req, res) => {
+    const firstName = req.query.firstname;
+    const lastName = req.query.lastname;
+    res.json({ "name": firstName + " " + lastName });
+})  
+```  
+URL=> **/name?firstname=anthony&lastname=VDO**  
